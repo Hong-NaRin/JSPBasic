@@ -52,7 +52,7 @@ public class DepartmentDAO {
 		String uid = "HR";
 		String upw = "HR";
 		
-		String sql = "SELECT * FROM DEPARTMENTS WHERE MANAGER_ID IS NOT NULL";
+	    String sql = "SELECT * FROM DEPARTMENTS WHERE MANAGER_ID IS NOT NULL";
 		
 		Connection conn = null; // 연결 객체
 		PreparedStatement pstmt = null; // sql문 실행 객체
@@ -74,6 +74,7 @@ public class DepartmentDAO {
 				
 				// 1행을 DTO에 저장 (내가 조회할 데이터가 1행이다 -> DTO)
 				DepartmentDTO dto = new DepartmentDTO(departmentId, departmentName, managerId, locationId); // 순서
+				
 				// DTO를 리스트에 추가
 				list.add(dto);
 			}
@@ -92,4 +93,45 @@ public class DepartmentDAO {
 		}
 		return list;
 	}
-}
+
+
+	// 부서번호를 조회하는 메서드 
+	public DepartmentDTO getDept(String dno) {
+		DepartmentDTO dto = null;
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		String sql = "SELECT * FROM DEPARTMENTS WHERE DEPARTMENT_ID =?";
+		
+		try {
+			conn = ds.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dno);
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				
+				int departmentId = rs.getInt("department_id"); // 컬럼명
+				String departmentName = rs.getString("department_name");
+				int managerId = rs.getInt("manager_id");
+				int locationId = rs.getInt("location_id");
+				
+				dto = new DepartmentDTO(departmentId, departmentName, managerId, locationId);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				if(conn != null) conn.close();
+				if(pstmt != null) pstmt.close();
+				if(rs != null) rs.close();
+			} catch (Exception e2) {
+			}
+		}
+		return dto;
+	}
+}	

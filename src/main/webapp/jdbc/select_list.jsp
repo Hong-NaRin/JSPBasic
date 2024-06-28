@@ -15,7 +15,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%--활성화된 부서수: <%=list.size() %> --%> <!-- jstl때문에 주석처리 -->
+	<%--활성화된 부서수: <%=list.size() %> --%> <!-- jdbc때문에 주석처리 -->
 	null이 아닌 부서의 수 : ${fn:length(list) }
 	<h3>부서 데이터</h3>
 	<table>
